@@ -62,7 +62,7 @@ def transcribe(timeout=10, silence_timeout=3):
                         result = json.loads(recognizer.Result())
                         text = result.get("text", "").strip()
                         if text:
-                            print(f"✅ Complete: '{text}'")
+                            print(f"Complete: '{text}'")
                             return text
                     else:
                         # Check for partial results
@@ -72,7 +72,7 @@ def transcribe(timeout=10, silence_timeout=3):
                         if current_partial and current_partial != partial_result:
                             partial_result = current_partial
                             last_speech_time = current_time
-                            print(f"🗣️  Partial: '{current_partial}'")
+                            print(f"Partial: '{current_partial}'")
                             
                 except queue.Empty:
                     continue
@@ -82,10 +82,10 @@ def transcribe(timeout=10, silence_timeout=3):
                 final_result = json.loads(recognizer.FinalResult())
                 final_text = final_result.get("text", "").strip()
                 if final_text:
-                    print(f"🎯 Final: '{final_text}'")
+                    print(f"Final: '{final_text}'")
                     return final_text
                 elif partial_result:
-                    print(f"🎯 Using partial: '{partial_result}'")
+                    print(f"Using partial: '{partial_result}'")
                     return partial_result
             
             print("❌ No speech detected")
@@ -98,7 +98,7 @@ def transcribe(timeout=10, silence_timeout=3):
 # Run transcription directly
 def recognize_from_microphone():
     text = transcribe()
-    print("📝 Recognized Text:", text)
+    print("Recognized Text:", text)
 
 if __name__ == "__main__":
     recognize_from_microphone()

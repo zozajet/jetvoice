@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# نصب unzip
+# Install unzip
 RUN apt-get update && apt-get install -y \
     build-essential \
     libasound2-dev \
@@ -18,7 +18,7 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# دانلود و اکسترکت مدل vosk
+# Download and extract vosk
 RUN mkdir -p jetvoice/stt/models \
     && wget -O /tmp/vosk.zip https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip \
     && unzip /tmp/vosk.zip -d jetvoice/stt/models \
