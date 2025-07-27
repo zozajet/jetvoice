@@ -7,6 +7,7 @@
 
 
 # Tasks
+- [ ] [Voice Activity Detection]()
 - [x] [Speech To Text]()
 - [x] [OpenAI api calling]()
 - [ ] [Text To Speech]()
@@ -15,7 +16,8 @@
 
 
 # How to setup
-Make a copy of .env.example to .env, then set environment variables
+Copy .env.example to .env, then set environment variables
+
 ## set .env
 ```bash
 OPENAI_API_KEY="Place you openai api key here"
@@ -23,31 +25,30 @@ VOSK_MODEL=vosk-model-small-en-us-0.15
 AUDIO_DEVICE=-1
 SAMPLE_RATE=16000
 ```
-## init project
+## Init project
 ```bash
 make init
 ```
 
-## build docker image
+## Build docker image
 ```bash
 make build
 ```
 
-## run docker container
+## Run docker container
 ```bash
 make up
 ```
 
-## show logs
+## Show logs
 ```bash
 make logs
 ```
 
-Or use simple cmd
+🚀 Or use simple cmd
 ```bash
 make deploy
 ```
-
 
 # How to test
 ```
