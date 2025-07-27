@@ -7,17 +7,49 @@
 
 
 # Tasks
-- [ ] [Speech To Text]()
-- [ ] [OpenAI api calling]()
+- [x] [Speech To Text]()
+- [x] [OpenAI api calling]()
 - [ ] [Text To Speech]()
 - [ ] [Docker Image]()
 - [x] [Test]()
 
 
-# test openai call
+# How to setup
+Make a copy of .env.example to .env, then set environment variables
+## set .env
 ```bash
-dev@mn [23:01:27] [~/zozajet/jetvoice] [main *]
--> % python -m jetvoice.llm.llm
-I am Jet Voice, a smart voice assistant designed to run on the Jetson Nano board. My main purpose is to assist users with various tasks, provide information, and enhance the functionality of the devices I'm integrated with. I can help with things like answering questions, controlling smart home devices, and providing updates on different topics. My training data goes up to October 2023, so I'm equipped with a good amount of knowledge to assist you. How can I help you today?
+OPENAI_API_KEY="Place you openai api key here"
+VOSK_MODEL=vosk-model-small-en-us-0.15
+AUDIO_DEVICE=-1
+SAMPLE_RATE=16000
+```
+## init project
+```bash
+make init
+```
 
+## build docker image
+```bash
+make build
+```
+
+## run docker container
+```bash
+make up
+```
+
+## show logs
+```bash
+make logs
+```
+
+Or use simple cmd
+```bash
+make deploy
+```
+
+
+# How to test
+```
+make test
 ```

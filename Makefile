@@ -25,10 +25,6 @@ init:
 build:
 	docker build -t $(IMAGE_NAME) .
 
-# Run the container interactively (for debugging/development)
-run:
-	docker run --rm -it --name $(CONTAINER_NAME) $(IMAGE_NAME) bash
-
 # Stop and remove container (if running in background mode)
 down:
 	-docker stop $(CONTAINER_NAME) && docker rm $(CONTAINER_NAME)
@@ -52,10 +48,6 @@ clean:
 logs:
 	docker logs -f $(CONTAINER_NAME)
 
-# Format Python code
-format:
-	black jetvoice
-
 # Run linters
 lint:
 	pylint jetvoice
@@ -68,5 +60,8 @@ dbul: down build up logs
 
 # Restart: Down -> Up -> Logs
 restart: down up logs
+
+# Down -> Init-> Build -> Up -> Logs
+deploy: down init build up logs
 
 .PHONY: init build run down up clean logs format lint
