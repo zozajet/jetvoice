@@ -1,5 +1,9 @@
 # Makefile for jetvoice
 
+# Load environment variables from .env
+include .env
+export
+
 # Project config
 IMAGE_NAME=jetvoice
 CONTAINER_NAME=jetvoice_container
@@ -7,10 +11,15 @@ ENV_FILE=.env
 
 # Init: download STT model
 init:
-	mkdir -p jetvoice/stt/models \
-	&& wget -O /tmp/vosk.zip https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip \
-	&& unzip /tmp/vosk.zip -d jetvoice/stt/models \
-	&& rm /tmp/vosk.zip
+	@if [ ! -d "jetvoice/stt/models/$(VOSK_MODEL)" ]; then \
+		echo "Model '$(VOSK_MODEL)' not found. Downloading..."; \
+		mkdir -p jetvoice/stt/models; \
+		wget -O /tmp/vosk.zip https://alphacephei.com/vosk/models/$(VOSK_MODEL).zip; \
+		unzip /tmp/vosk.zip -d jetvoice/stt/models; \
+		rm /tmp/vosk.zip; \
+	else \
+		echo "Model '$(VOSK_MODEL)' already exists. Skipping download."; \
+	fi
 
 # Build Docker image
 build:
@@ -52,7 +61,7 @@ lint:
 	pylint jetvoice
 
 test:
-	pytest tests || echo "No tests yet 😅"
+	pytest tests
 
 # Down -> Build -> Up -> Logs
 dbul: down build up logs

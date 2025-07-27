@@ -8,7 +8,8 @@ import wave
 
 # Path to the Vosk speech recognition model (configurable)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.getenv("VOSK_MODEL_PATH", os.path.join(BASE_DIR, "models/vosk-model-small-en-us-0.15"))
+VOSK_MODEL = os.getenv("VOSK_MODEL", "vosk-model-small-en-us-0.15")
+MODEL_PATH = os.path.join(BASE_DIR, "models", VOSK_MODEL)
 AUDIO_DEVICE = os.getenv("AUDIO_DEVICE", None)
 SAMPLE_RATE = os.getenv("SAMPLE_RATE", 16000)
 
