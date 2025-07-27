@@ -13,6 +13,11 @@
 - [ ] [Text To Speech]()
 - [ ] [Docker Image]()
 - [x] [Test]()
+  - [ ] [Test VAD]()
+  - [x] [Test STT]()
+  - [ ] [Test LLM]()
+  - [ ] [Test TTS]()
+
 
 
 # How to setup
