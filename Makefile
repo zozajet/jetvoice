@@ -3,6 +3,7 @@
 # Project config
 IMAGE_NAME=jetvoice
 CONTAINER_NAME=jetvoice_container
+ENV_FILE=.env
 
 # Init: download STT model
 init:
@@ -25,7 +26,11 @@ down:
 
 # Run container in background with volume mount (edit code live)
 up:
-	docker run -d --name $(CONTAINER_NAME) \
+	docker run -d \
+		--env-file $(ENV_FILE) \
+		--device /dev/snd \
+		--privileged \
+		--name $(CONTAINER_NAME) \
 		-v $$(pwd):/app \
 		$(IMAGE_NAME)
 
@@ -51,5 +56,8 @@ test:
 
 # Down -> Build -> Up -> Logs
 dbul: down build up logs
+
+# Restart: Down -> Up -> Logs
+restart: down up logs
 
 .PHONY: init build run down up clean logs format lint

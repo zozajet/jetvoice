@@ -8,13 +8,16 @@ import time
 # Path to the Vosk speech recognition model (configurable)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.getenv("VOSK_MODEL_PATH", os.path.join(BASE_DIR, "models/vosk-model-small-en-us-0.15"))
-
-# Audio settings
-SAMPLE_RATE = 16000
-DEVICE = None  # Default device
+AUDIO_DEVICE = os.getenv("AUDIO_DEVICE", None)
+SAMPLE_RATE = os.getenv("SAMPLE_RATE", 16000)
 
 # Load Vosk model once
 try:
+    print("#---------- List of audio devices ------------------")
+    for i, dev in enumerate(sd.query_devices()):
+        print(f"{i}: {dev['name']} - ({dev['max_input_channels']} in, {dev['max_output_channels']} out)")
+    print("----------------------------------------------------")
+
     model = vosk.Model(MODEL_PATH)
 except Exception as e:
     raise RuntimeError(f"Vosk model not found at {MODEL_PATH}. Error: {e}")
@@ -32,11 +35,11 @@ def transcribe(timeout=10, silence_timeout=3):
     Transcribe speech with timeout and silence detection
     """
     try:
-        with sd.RawInputStream(samplerate=SAMPLE_RATE, blocksize=8000, dtype='int16',
-                               channels=1, callback=callback):
+        with sd.RawInputStream(samplerate=SAMPLE_RATE, blocksize=8000, dtype='int16', 
+                               channels=1, device=AUDIO_DEVICE, callback=callback):
             recognizer = vosk.KaldiRecognizer(model, SAMPLE_RATE)
             print("🎤 Listening... (speak now)")
-            
+
             start_time = time.time()
             last_speech_time = None
             partial_result = ""
