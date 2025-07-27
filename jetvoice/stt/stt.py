@@ -4,6 +4,7 @@ import sounddevice as sd
 import vosk
 import json
 import time
+import wave
 
 # Path to the Vosk speech recognition model (configurable)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -97,6 +98,57 @@ def transcribe(timeout=10, silence_timeout=3):
     except Exception as e:
         print(f"[STT Error]: {e}")
         return ""
+
+
+
+# Add this new function at the end of the file
+def transcribe_file(file_path: str) -> str:
+    """
+    Transcribes a local audio file.
+
+    This function is primarily for testing the Vosk model with a consistent
+    input. The audio file must be in WAV format with the correct properties.
+
+    Args:
+        file_path: The path to the .wav file.
+
+    Returns:
+        The transcribed text as a string.
+    """
+    try:
+        # Check if the file is in the required format
+        wf = wave.open(file_path, "rb")
+        expected_framerate = int(SAMPLE_RATE)
+        if (wf.getnchannels() != 1 or wf.getsampwidth() != 2 or
+                wf.getcomptype() != "NONE" or wf.getframerate() != expected_framerate):
+            raise TypeError(
+                f"Audio file must be WAV format, mono, 16-bit, {expected_framerate} Hz. "
+                f"File provided has {wf.getnchannels()} channels, "
+                f"{wf.getsampwidth()*8}-bit, {wf.getframerate()} Hz."
+            )
+
+        recognizer = vosk.KaldiRecognizer(model, wf.getframerate())
+        
+        while True:
+            data = wf.readframes(4000)  # Read audio in chunks
+            if len(data) == 0:
+                break
+            recognizer.AcceptWaveform(data)
+
+        # Get the final recognized text
+        result = json.loads(recognizer.FinalResult())
+        return result.get("text", "").strip()
+
+    except FileNotFoundError:
+        print(f"Error: The test audio file '{file_path}' was not found.")
+        return ""
+    except TypeError as e:
+        print(f"Error: {e}")
+        return ""
+    except Exception as e:
+        print(f"[STT File Error]: {e}")
+        return ""
+    
 
 # Run transcription directly
 def recognize_from_microphone():
